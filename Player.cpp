@@ -63,13 +63,16 @@ void Player::setExperience(int exp){
     experience=exp;
 }
 void Player::setAccuracy(int acc){
-    accuracy=acc;
+    if (acc<100){accuracy=100;}
+    else {accuracy=acc;}
 }
 void Player::setEfficiency(int eff){
-    efficiency=eff;
+    if(eff<100){efficiency=100;}
+    else{efficiency=eff;}
 }
 void Player::setInsight(int ins){
-    insight=ins;
+    if (ins<100){insight=100;}
+    else{insight=ins;}
 }
 void Player::setDiscoveryPts(int dp){
     discoveryPoints=dp;
