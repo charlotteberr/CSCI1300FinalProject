@@ -16,15 +16,15 @@ Player::Player(){
     lane=-1;
 }
 
-Player::Player(string n, int exp, int acc, int eff, int ins, int dp, int adv, int pt, int l){
+Player::Player(string n, int exp, int acc, int eff, int ins, int dp){
     playerName=n;
     experience=exp;
     accuracy=acc;
     efficiency=eff;
     insight=ins;
     discoveryPoints=dp;
-    advisor=adv;
-    pathType=pt;
+    advisor=0;
+    pathType=-1;
     lane=-1;
 }
 

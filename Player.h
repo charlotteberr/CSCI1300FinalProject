@@ -15,7 +15,7 @@ class Player{
         int lane;
     public:
         Player(); // default constructor
-        Player(string n, int exp, int acc, int eff, int ins, int dp, int adv, int pt, int l); // parameterized constructor
+        Player(string n, int exp, int acc, int eff, int ins, int dp); // parameterized constructor
 
         string getName(); //getters
         int getExperience();
