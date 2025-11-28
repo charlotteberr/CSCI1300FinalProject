@@ -7,7 +7,7 @@ class Player{
         string playerName;
         int experience;
         int accuracy;
-        int efficieny;
+        int efficiency;
         int insight;
         int discoveryPoints;
         int advisor;
@@ -17,7 +17,7 @@ class Player{
         Player(); // default constructor
         Player(string n, int exp, int acc, int eff, int ins, int dp, int adv, int pt, int l); // parameterized constructor
 
-        string getName();
+        string getName(); //getters
         int getExperience();
         int getAccuracy();
         int getEfficiency();
@@ -27,7 +27,7 @@ class Player{
         int getPathType();
         int getLane();
 
-        void setName(string n);
+        void setName(string n); //setters
         void setExperience(int exp);
         int setAccuracy(int acc);
         int setEfficiency(int eff);
