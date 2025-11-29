@@ -65,7 +65,7 @@ int main(){
         cout<<" | Accuracy: "<<characterInfo[i].getAccuracy()<<" | Efficiency: "<<characterInfo[i].getEfficiency();
         cout<<" | Insight: "<<characterInfo[i].getInsight()<<" | DP: "<<characterInfo[i].getDiscoveryPts()<<endl;
     }
-
+    cout<<endl;
     cout<<"PLAYER 1, choose your character (Type a number 1-5): ";
     int choice1;
     cin>>choice1;
