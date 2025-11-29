@@ -35,7 +35,7 @@ int main(){
     ifstream inFile;
     inFile.open("characters.txt");
     string line;
-    int i=0;
+    int index=0;
     if(inFile.fail()){
         cout<<"Error opening characters.txt"<<endl;
         return 1;
@@ -50,9 +50,32 @@ int main(){
             int ins=stoi(parts[4]);
             int dp=stoi(parts[5]);
 
-            characterInfo[i]=Player(n, exp, acc, eff, ins, dp);
-            i++;
+            characterInfo[index]=Player(n, exp, acc, eff, ins, dp);
+            index++;
         }
     }
+    inFile.close();
 
+    cout<<"Welcome to the Journey Through the Genome!"<<endl;
+    cout<<"Here we have the 5 characters to choose from..."<<endl;
+    cout<<endl;
+    for(int i=0;i<5;i++){  //display all 5 characters info
+        cout<<i+1<<". ";
+        cout<<characterInfo[i].getName()<<" | Experience: "<<characterInfo[i].getExperience();
+        cout<<" | Accuracy: "<<characterInfo[i].getAccuracy()<<" | Efficiency: "<<characterInfo[i].getEfficiency();
+        cout<<" | Insight: "<<characterInfo[i].getInsight()<<" | DP: "<<characterInfo[i].getDiscoveryPts()<<endl;
+    }
+
+    cout<<"PLAYER 1, choose your character (Type a number 1-5): ";
+    int choice1;
+    cin>>choice1;
+    players[0]=characterInfo[choice1-1];
+    cout<<"PLAYER 2, choose your character (Type a number 1-5, not including "<<choice1<<"): ";
+    int choice2;
+    cin>>choice2;
+    while(choice1==choice2){
+        cout<<"Choose a different character that is not being used byt PLAYER 1: ";
+        cin>>choice2;
+    }
+    players[1]=characterInfo[choice2-1];
 }
