@@ -56,7 +56,7 @@ int main(){
     }
     inFile.close();
 
-    cout<<"Welcome to the Journey Through the Genome!"<<endl;
+    cout<<endl<<"Welcome to the Journey Through the Genome!"<<endl;
     cout<<"Here we have the 5 characters to choose from..."<<endl;
     cout<<endl;
     for(int i=0;i<5;i++){  //display all 5 characters info
@@ -108,10 +108,19 @@ int main(){
         cout<<"Type a number 1-5: ";
         int advisorChoice;
         cin>>advisorChoice;
+        players[0].setPathType(choice1-1);
         players[0].setAdvisor(advisorChoice);
+        players[0].addDiscoveryPts(-5000);
+        players[0].addAccuracy(500);
+        players[0].addEfficiency(500);
+        players[0].addInsight(1000);
     }
     else{
-        players[0].setPathType(choice1);
+        players[0].setPathType(choice1-1);
+        players[0].addDiscoveryPts(5000);
+        players[0].addAccuracy(200);
+        players[0].addEfficiency(200);
+        players[0].addInsight(200);
     }
 
     cout<<endl<<"PLAYER 2, choose your path (Type 1 or 2): ";
@@ -132,9 +141,24 @@ int main(){
         cout<<"Type a number 1-5: ";
         int advisorChoice;
         cin>>advisorChoice;
+        players[1].setPathType(choice2-1);
         players[1].setAdvisor(advisorChoice);
+        players[1].addDiscoveryPts(-5000);
+        players[1].addAccuracy(500);
+        players[1].addEfficiency(500);
+        players[1].addInsight(1000);
     }
     else{
-        players[1].setPathType(choice2);
+        players[1].setPathType(choice2-1);
+        players[1].addDiscoveryPts(5000);
+        players[1].addAccuracy(200);
+        players[1].addEfficiency(200);
+        players[1].addInsight(200);
     }
+
+    players[0].setLane(0);
+    players[1].setLane(1);
+
+    cout<<endl<<"Starting Board..."<<endl;
+    board.displayBoard();
 }
