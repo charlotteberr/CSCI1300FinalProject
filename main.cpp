@@ -178,7 +178,7 @@ Player processBlueTile(Player p){
         p.addInsight(200);
         p.addDiscoveryPts(1000);
     }
-    if(similarity>=0.5){
+    if(similarity<0.8 && similarity>=0.5){
         cout<<endl<<"Good match.\n";
         p.addAccuracy(100);
         p.addInsight(100);
@@ -256,7 +256,7 @@ Player processPinkTile(Player p){
         p.addInsight(200);
         p.addDiscoveryPts(1000);
     }
-    if(bestScore>=0.5){
+    if(bestScore<0.8 && bestScore>=0.5){
         cout<<endl<<"Good match.\n";
         p.addAccuracy(100);
         p.addInsight(100);
@@ -315,19 +315,19 @@ Player processRedTile(Player p){
     double bestScore=strandSimilarity(bestWindow, targetStrand);
 
     if(bestScore>=0.8){
-        cout<<endl<<"Excellent mutation analysis!";
+        cout<<endl<<"Excellent mutation analysis!\n";
         p.addAccuracy(200);
         p.addInsight(200);
         p.addDiscoveryPts(1000);
     }
     if(bestScore>=0.5){
-        cout<<endl<<"Moderate mutation detection.";
+        cout<<endl<<"Moderate mutation detection.\n";
         p.addAccuracy(100);
         p.addInsight(100);
         p.addDiscoveryPts(500);
     }
     else{
-        cout<<endl<<"Weak mutation identification...";
+        cout<<endl<<"Weak mutation identification...\n";
         p.addAccuracy(-100);
         p.addInsight(-100);
         p.addDiscoveryPts(-500);
