@@ -56,6 +56,7 @@ vector<RandomEvent> loadRandomEvents(string filename){
 Player processGreenTile(Player p, vector<RandomEvent> events){
     if(rand()%2==0){
         cout<<endl<<"No event triggered on this tile...\n";
+        return p;
     }
     int index=rand()% events.size();
     RandomEvent event=events[index];
@@ -116,12 +117,12 @@ Player processPurpleTile(Player p, vector<Riddle> riddles){
     getline(cin, answer);
     if(answer==riddle.answer){
         cout<<endl<<"----Correct!----\n";
-        cout<<endl<<"You gain +500 DP!";
+        cout<<endl<<"You gain +500 DP!\n";
         p.addDiscoveryPts(500);
     }
     else{
         cout<<endl<<"----WRONG----";
-        cout<<endl<<"You loose -500 DP...";
+        cout<<endl<<"The answer was | "<<riddle.answer<<" | You loose -500 DP...\n";
         p.addDiscoveryPts(-500);
     }
     return p;
@@ -165,26 +166,26 @@ Player processBlueTile(Player p){
     cin>>playerStrand;
     double similarity=strandSimilarity(referenceStrand, playerStrand);
     if(playerStrand.length()!=referenceStrand.length()){
-        cout<<endl<<"Automatic failure! Strands are unequal in length."<<endl;
+        cout<<endl<<"Automatic failure! Strands are unequal in length.\n"<<endl;
         p.addAccuracy(-200);
         p.addInsight(-200);
         p.addDiscoveryPts(-500);
     }
     cout<<endl<<"Similarity score: "<<similarity<<endl;
     if(similarity>=0.8){
-        cout<<endl<<"Excellent match!";
+        cout<<endl<<"Excellent match!\n";
         p.addAccuracy(200);
         p.addInsight(200);
         p.addDiscoveryPts(1000);
     }
     if(similarity>=0.5){
-        cout<<endl<<"Good match.";
+        cout<<endl<<"Good match.\n";
         p.addAccuracy(100);
         p.addInsight(100);
         p.addDiscoveryPts(500);
     }
     else{
-        cout<<endl<<"Poor match...";
+        cout<<endl<<"Poor match...\n";
         p.addAccuracy(-100);
         p.addInsight(-100);
         p.addDiscoveryPts(-500);
@@ -234,7 +235,7 @@ Player processPinkTile(Player p){
 
     int index=bestStrandMatch(inputStrand, targetStrand);
     if(index==-1){
-        cout<<endl<<"Could not find a valid alignment...";
+        cout<<endl<<"Could not find a valid alignment...\n";
         p.addAccuracy(-200);
         p.addInsight(-200);
         p.addDiscoveryPts(-500);
@@ -245,24 +246,88 @@ Player processPinkTile(Player p){
     double bestScore=strandSimilarity(bestWindow, targetStrand);
 
     cout<<endl<<"Best alignment starts at: "<<index<<endl;
-    cout<<"Best matching segment: "<<endl;
+    cout<<"Best matching segment: "<<bestWindow<<endl;
     cout<<"Target strand: "<<targetStrand<<endl;
     cout<<"Similarity Score: "<<bestScore<<endl;
 
     if(bestScore>=0.8){
-        cout<<endl<<"Excellent match!";
+        cout<<endl<<"Excellent match!\n";
         p.addAccuracy(200);
         p.addInsight(200);
         p.addDiscoveryPts(1000);
     }
     if(bestScore>=0.5){
-        cout<<endl<<"Good match.";
+        cout<<endl<<"Good match.\n";
         p.addAccuracy(100);
         p.addInsight(100);
         p.addDiscoveryPts(500);
     }
     else{
-        cout<<endl<<"Poor match...";
+        cout<<endl<<"Poor match...\n";
+        p.addAccuracy(-100);
+        p.addInsight(-100);
+        p.addDiscoveryPts(-500);
+    }
+    cout<<endl<<"----Updated Stats----"<<endl;
+    cout<<endl<<"Accuracy: "<<p.getAccuracy()<<endl;
+    cout<<"Insight: "<<p.getInsight()<<endl;
+    cout<<"Discovery Points: "<<p.getDiscoveryPts()<<endl;
+
+    return p;
+}
+
+void indentifyMutations(string inputStrand, string targetStrand){
+    cout<<"\n-----Mutation Report-----\n";
+    int startIndex=bestStrandMatch(inputStrand, targetStrand);
+    if(startIndex==-1){
+        cout<<"\nNo valid alignment found.\n";
+        return;
+    }
+    for(int i=0;i<startIndex;i++){  //deletions before best index
+        cout<<endl<<"Deletion | "<<inputStrand[i]<<" at index "<<i<<endl;
+    }
+    for(int i=0;i<targetStrand.length();i++){ //substitutions in window
+        if(inputStrand[startIndex+i]!=targetStrand[i]){
+            cout<<endl<<"Substitution | "<<inputStrand[startIndex+i]<<" -> "<<targetStrand[i]<<" at index "<<(startIndex+i)<<endl;
+        }
+    }
+    for(int i=startIndex+targetStrand.length(); i<inputStrand.length(); i++){ //deletions after window
+        cout<<endl<<"Deletion | "<<inputStrand[i]<<" at index "<<i<<endl;
+    }
+}
+
+Player processRedTile(Player p){
+    cout<<endl<<"-----DNA TASK 3: Mutation Identification-----\n";
+    cout<<"The strands will be aligned first using best similarity.\n";
+    cout<<"Then substitutions and deletions will be reported.\n";
+    cout<<"Use only A, C, G, and T. All caps, no spaces.\n\n";
+    string inputStrand;
+    string targetStrand;
+    cout<<"Enter the LONGER DNA strand: ";
+    cin>>inputStrand;
+    cout<<"Enter the SHORTER DNA strand: ";
+    cin>>targetStrand;
+
+    indentifyMutations(inputStrand, targetStrand);
+
+    int index=bestStrandMatch(inputStrand, targetStrand);
+    string bestWindow=inputStrand.substr(index, targetStrand.length());
+    double bestScore=strandSimilarity(bestWindow, targetStrand);
+
+    if(bestScore>=0.8){
+        cout<<endl<<"Excellent mutation analysis!";
+        p.addAccuracy(200);
+        p.addInsight(200);
+        p.addDiscoveryPts(1000);
+    }
+    if(bestScore>=0.5){
+        cout<<endl<<"Moderate mutation detection.";
+        p.addAccuracy(100);
+        p.addInsight(100);
+        p.addDiscoveryPts(500);
+    }
+    else{
+        cout<<endl<<"Weak mutation identification...";
         p.addAccuracy(-100);
         p.addInsight(-100);
         p.addDiscoveryPts(-500);
@@ -537,7 +602,7 @@ int main(){
                         players[currentPlayer]=processPinkTile(players[currentPlayer]);
                     }
                     else if(color=='R'){
-                        
+                        players[currentPlayer]=processRedTile(players[currentPlayer]);
                     }
                     else if(color=='T'){
                         
