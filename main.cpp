@@ -127,6 +127,154 @@ Player processPurpleTile(Player p, vector<Riddle> riddles){
     return p;
 }
 
+string generateRandomDNA(int length){
+    string dna="";
+    string bases="ACGT";
+    for(int i=0; i<length; i++){
+        int r =rand()%4;
+        dna+=bases[r];
+    }
+    return dna;
+}
+
+double strandSimilarity(string strand1, string strand2){
+    int matches=0;
+    if(strand1.length()!=strand2.length()){
+        cout<<endl<<"Strands are unequal in length. Similarity Score: 0\n";
+    }
+    else{
+        for(int i=0; i<strand1.length();i++){
+            if(strand1[i]==strand2[i]){
+                matches++;
+            }
+        }
+    }
+    double similarity=static_cast<double>(matches)/strand1.length();
+    return similarity;
+}
+
+Player processBlueTile(Player p){
+    cout<<endl<<"-----DNA TASK 1: Similarity (Equal-Length)-----\n";
+    cout<<"\nA reference DNA strand has been generated and you must type in your own strand of equal length to compare\n";
+    cout<<"Remember DNA strands use bases A, C, G, and T. Enter all caps no spaces.\n";
+    int randomLength=rand()%5+4;
+    string referenceStrand=generateRandomDNA(randomLength);
+    cout<<endl<<"Reference strand: "<<referenceStrand<<endl;
+    cout<<"You strand: ";
+    string playerStrand;
+    cin>>playerStrand;
+    double similarity=strandSimilarity(referenceStrand, playerStrand);
+    if(playerStrand.length()!=referenceStrand.length()){
+        cout<<endl<<"Automatic failure! Strands are unequal in length."<<endl;
+        p.addAccuracy(-200);
+        p.addInsight(-200);
+        p.addDiscoveryPts(-500);
+    }
+    cout<<endl<<"Similarity score: "<<similarity<<endl;
+    if(similarity>=0.8){
+        cout<<endl<<"Excellent match!";
+        p.addAccuracy(200);
+        p.addInsight(200);
+        p.addDiscoveryPts(1000);
+    }
+    if(similarity>=0.5){
+        cout<<endl<<"Good match.";
+        p.addAccuracy(100);
+        p.addInsight(100);
+        p.addDiscoveryPts(500);
+    }
+    else{
+        cout<<endl<<"Poor match...";
+        p.addAccuracy(-100);
+        p.addInsight(-100);
+        p.addDiscoveryPts(-500);
+    }
+    cout<<endl<<"----Updated Stats----"<<endl;
+    cout<<endl<<"Accuracy: "<<p.getAccuracy()<<endl;
+    cout<<"Insight: "<<p.getInsight()<<endl;
+    cout<<"Discovery Points: "<<p.getDiscoveryPts()<<endl;
+
+    return p;
+}
+
+int bestStrandMatch(string inputStrand, string targetStrand){
+    if(inputStrand.length()==0 || targetStrand.length()==0){
+        return -1;
+    }
+    if(targetStrand.length()>inputStrand.length()){
+        return -1;
+    }
+    if(targetStrand.length()==inputStrand.length()){
+        return -1;
+    }
+    double bestScore=-1;
+    int bestIndex=-1;
+    for(int i=0; i<=inputStrand.length()-targetStrand.length();i++){
+        string window=inputStrand.substr(i,targetStrand.length());
+        double score=strandSimilarity(window, targetStrand);
+        if(score>bestScore){
+            bestScore=score;
+            bestIndex=i;
+        }
+    }
+    return bestIndex;
+}
+
+Player processPinkTile(Player p){
+    cout<<endl<<"-----DNA TASK 2: Similarity (Unequal-Length)-----\n";
+    cout<<"You have a longer DNA strand and a shorter pattern.\n";
+    cout<<"The goal is to find where the shorter strand matches best inside the longer one.\n";
+    cout<<"Use only the letters A, C, G, and T. All caps, no spaces.\n\n";
+    string inputStrand;
+    string targetStrand;
+    cout<<"Enter the LONGER DNA strand: ";
+    cin>>inputStrand;
+    cout<<"Enter the SHORTER DNA strand: ";
+    cin>>targetStrand;
+
+    int index=bestStrandMatch(inputStrand, targetStrand);
+    if(index==-1){
+        cout<<endl<<"Could not find a valid alignment...";
+        p.addAccuracy(-200);
+        p.addInsight(-200);
+        p.addDiscoveryPts(-500);
+        return p;
+    }
+
+    string bestWindow=inputStrand.substr(index, targetStrand.length());
+    double bestScore=strandSimilarity(bestWindow, targetStrand);
+
+    cout<<endl<<"Best alignment starts at: "<<index<<endl;
+    cout<<"Best matching segment: "<<endl;
+    cout<<"Target strand: "<<targetStrand<<endl;
+    cout<<"Similarity Score: "<<bestScore<<endl;
+
+    if(bestScore>=0.8){
+        cout<<endl<<"Excellent match!";
+        p.addAccuracy(200);
+        p.addInsight(200);
+        p.addDiscoveryPts(1000);
+    }
+    if(bestScore>=0.5){
+        cout<<endl<<"Good match.";
+        p.addAccuracy(100);
+        p.addInsight(100);
+        p.addDiscoveryPts(500);
+    }
+    else{
+        cout<<endl<<"Poor match...";
+        p.addAccuracy(-100);
+        p.addInsight(-100);
+        p.addDiscoveryPts(-500);
+    }
+    cout<<endl<<"----Updated Stats----"<<endl;
+    cout<<endl<<"Accuracy: "<<p.getAccuracy()<<endl;
+    cout<<"Insight: "<<p.getInsight()<<endl;
+    cout<<"Discovery Points: "<<p.getDiscoveryPts()<<endl;
+
+    return p;
+}
+
 int main(){
     srand(time(0));
     Board board;
@@ -383,10 +531,10 @@ int main(){
                         players[currentPlayer]=processPurpleTile(players[currentPlayer], riddles);
                     }
                     else if(color=='B'){
-                        
+                        players[currentPlayer]=processBlueTile(players[currentPlayer]);
                     }
                     else if(color=='P'){
-                        
+                        players[currentPlayer]=processPinkTile(players[currentPlayer]);
                     }
                     else if(color=='R'){
                         
