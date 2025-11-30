@@ -36,9 +36,10 @@ struct RandomEvent{
 vector<RandomEvent> loadRandomEvents(string filename){
     vector<RandomEvent> events;
     ifstream inFile;
-    inFile.open("random_events.txt");
+    inFile.open(filename);
     string line;
     while(getline(inFile,line)){
+        if(line.length()==0) continue;
         if(line[0]=='/') continue;
         vector<string> parts=split(line, '|');
         RandomEvent event;
@@ -67,7 +68,7 @@ Player processGreenTile(Player p, vector<RandomEvent> events){
         cout<<endl<<event.description<<endl;
         if(event.dpChange<0){
             if(p.getAdvisor()==event.advisorProtection && event.advisorProtection!=0){
-                cout<<endl<<"Your advisor protected you from this event! No DP change occurs.";
+                cout<<endl<<"Your advisor protected you from this event! No DP change occurs.\n";
             }
             else{
                 cout<<endl<<"You lose "<<event.dpChange<<" DP...\n";
@@ -80,6 +81,50 @@ Player processGreenTile(Player p, vector<RandomEvent> events){
         }
         return p;
     }
+}
+
+struct Riddle{
+    string question;
+    string answer;
+};
+
+vector<Riddle> loadRiddles(string filename){
+    vector<Riddle> riddles;
+    ifstream inFile;
+    inFile.open(filename);
+    string line;
+    while(getline(inFile,line)){
+        if(line.length()==0) continue;
+        if(line[0]=='Q') continue;
+        vector<string> parts=split(line, '|');
+        Riddle riddle;
+        riddle.question=parts[0];
+        riddle.answer=parts[1];
+
+        riddles.push_back(riddle);
+    }
+    return riddles;
+}
+
+Player processPurpleTile(Player p, vector<Riddle> riddles){
+    int index=rand()% riddles.size();
+    Riddle riddle=riddles[index];
+    cout<<endl<<riddle.question<<endl;
+    cout<<"\nAnswer: ";
+    string answer;
+    cin.ignore();
+    getline(cin, answer);
+    if(answer==riddle.answer){
+        cout<<endl<<"----Correct!----\n";
+        cout<<endl<<"You gain +500 DP!";
+        p.addDiscoveryPts(500);
+    }
+    else{
+        cout<<endl<<"----WRONG----";
+        cout<<endl<<"You loose -500 DP...";
+        p.addDiscoveryPts(-500);
+    }
+    return p;
 }
 
 int main(){
@@ -112,7 +157,8 @@ int main(){
     }
     inFile.close();
 
-    vector<RandomEvent> randomEvents=loadRandomEvents("random_events.txt");
+    vector<RandomEvent> randomEvents=loadRandomEvents("random_events.txt");  // loading in files for events/riddles
+    vector<Riddle> riddles=loadRiddles("riddles.txt"); 
 
     cout<<endl<<"Welcome to the Journey Through the Genome!"<<endl;
     cout<<"Here we have the 5 characters to choose from..."<<endl;
@@ -334,7 +380,7 @@ int main(){
                         players[currentPlayer]=processGreenTile(players[currentPlayer], randomEvents);
                     }
                     else if(color=='U'){
-                        
+                        players[currentPlayer]=processPurpleTile(players[currentPlayer], riddles);
                     }
                     else if(color=='B'){
                         
