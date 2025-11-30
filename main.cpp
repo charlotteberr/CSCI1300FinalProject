@@ -340,6 +340,40 @@ Player processRedTile(Player p){
     return p;
 }
 
+void transcribeDNAtoRNA(string strand){
+    cout<<endl<<"\n----DNA to RNA Transcription----\n";
+    cout<<"DNA Strand: "<<strand<<endl;
+    string rna="";
+    for(int i=0;i<strand.length();i++){
+        if(strand[i]=='T'){
+            rna+='U';
+        }
+        else{
+            rna+=strand[i];
+        }
+    }
+    cout<<"RNA Strand: "<<rna<<endl;
+}
+
+Player processBrownTile(Player p){
+    cout<<endl<<"-----DNA TASK 4: RNA Transcription-----\n";
+    cout<<"You will convert a DNA strand into RNA.\n";
+    cout<<"Remember: T becomes U.\n";
+    cout<<"Use only A, C, G, and T. All caps, no spaces.\n\n";
+    cout<<"Enter the DNA strand to transcribe: ";
+    string strand;
+    cin>>strand;
+    transcribeDNAtoRNA(strand);
+    cout<<"\nSuccessful transcription improves lab efficiency!\n";
+    p.addEfficiency(300);
+    p.addDiscoveryPts(600);
+    cout<<endl<<"\n----Updated Stats----"<<endl;
+    cout<<endl<<"Efficiency: "<<p.getEfficiency()<<endl;
+    cout<<"Discovery Points: "<<p.getDiscoveryPts()<<endl;
+
+    return p;
+}
+
 int main(){
     srand(time(0));
     Board board;
@@ -605,7 +639,7 @@ int main(){
                         players[currentPlayer]=processRedTile(players[currentPlayer]);
                     }
                     else if(color=='T'){
-                        
+                        players[currentPlayer]=processBrownTile(players[currentPlayer]);
                     }
                     else{
                         cout<<"\nInvalid Tile Type.";
