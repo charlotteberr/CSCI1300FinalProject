@@ -85,11 +85,11 @@ int main(){
 
     cout<<endl;
     cout<<"Time to choose your paths... "<<endl;
-    cout<<"1. Training Fellowship"<<endl;
+    cout<<"| 1 | Training Fellowship"<<endl;
     cout<<"This path equips your scientist with essential traits (accuracy, efficiency, and insight) needed for future challenges. "<<endl;
     cout<<"Requires an investment of -5000 DP. But, gives +500 ACC, +500 EFF, and +1000 INS."<<endl;
     cout<<"You will choose an advisor who grants a special ability that protects them during random events that negatively impact DP."<<endl;
-    cout<<endl<<"2. Direct Lab Assignment"<<endl;
+    cout<<endl<<"| 2 | Direct Lab Assignment"<<endl;
     cout<<"This option lets your scientist jump directly into the life of DNA sequencing."<<endl;
     cout<<"Gives an immediate boost of +5000 DP. Also gives +200 ACC, +200 EFF, +200 INS."<<endl;
     cout<<"No advisor is given."<<endl;
@@ -165,4 +165,66 @@ int main(){
 
     cout<<endl<<"Starting Board..."<<endl;
     board.displayBoard();
+
+    bool p1Finished=false;
+    bool p2Finished=false; // becomes true when they finish their lane
+    int currentPlayer=0; // tracking which players turn it is
+
+    while(!p1Finished || !p2Finished){
+        cout<<endl<<"------------------------------------------";
+        cout<<endl<<"             PLAYER "<<currentPlayer+1<<"'s TURN              ";
+        cout<<endl<<"------------------------------------------";
+        bool turnFinished=false;
+        while(!turnFinished){
+            cout<<endl<<"Choose an option from the menu...";
+            cout<<endl<<"| 1 | Check Player Progress";
+            cout<<endl<<"| 2 | Review Character";
+            cout<<endl<<"| 3 | Check Board Postion";
+            cout<<endl<<"| 4 | Review Advisor";
+            cout<<endl<<"| 5 | Move Forward"<<endl;
+            cout<<endl<<"Choice: ";
+            int menuChoice1;
+            cin>>menuChoice1;
+            if(menuChoice1==1){
+                // ADD CHOICE 1
+            }
+            else if(menuChoice1==2){
+                // ADD CHOICE 2
+            }
+            else if(menuChoice1==3){
+                board.displayBoard();
+            }
+            else if(menuChoice1==4){
+                //ADD CHOICE 4
+            }
+            else if(menuChoice1==5){
+                int roll = rand() % 6+1;
+                cout<<endl<<"You rolled a "<<roll<<"!"<<endl;
+                bool reachedEnd=false;
+                for(int step=0; step<roll; step++){
+                    reachedEnd=board.movePlayer(currentPlayer);
+                    if(reachedEnd){
+                        break;
+                    }
+                }
+                board.displayBoard();
+                
+                if(reachedEnd){
+                    cout<<endl<<"Player "<<currentPlayer+1<<" reached the end of the board!"<<endl;
+                    if(currentPlayer==0){
+                        p1Finished=true;
+                    }
+                    else{
+                        p2Finished=true;
+                    }
+                }
+
+                turnFinished=true;
+            }
+            else{
+                cout<<endl<<"Invalid Menu Option. Try Again."<<endl;
+            }
+        }
+        currentPlayer=1-currentPlayer;
+    }
 }
