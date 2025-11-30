@@ -26,6 +26,32 @@ vector<string> split(string line, char delimiter){
     return parts;
 }
 
+struct RandomEvent{
+    string description;
+    int pathType;
+    int advisorProtection;
+    int dpChange;
+};
+
+vector<RandomEvent> loadRandomEvents(string filename){
+    vector<RandomEvent> events;
+    ifstream inFile;
+    inFile.open("random_events.txt");
+    string line;
+    while(getline(inFile,line)){
+        if(line[0]=='/') continue;
+        vector<string> parts=split(line, '|');
+        RandomEvent event;
+        event.description=parts[0];
+        event.pathType=stoi(parts[1]);
+        event.advisorProtection=stoi(parts[2]);
+        event.dpChange=stoi(parts[3]);
+        
+        events.push_back(event);
+    }
+    return events;
+}
+
 int main(){
     srand(time(0));
     Board board;
